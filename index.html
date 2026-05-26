@@ -1,33 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minhas Aplicações Web</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Apps</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h1>Minhas Aplicações Web</h1>
-    <p>Sistemas que desenvolvi para estudar, ensinar e aprender.</p>
+<div class="sidebar">
+  <div class="logo">🚀 MeusApps</div>
 
-    <input 
-      type="text" 
-      id="searchInput" 
-      placeholder="Pesquisar aplicação..."
-    />
+  <nav>
+    <a class="active">🏠 Início</a>
+    <a>📦 Aplicações</a>
+    <a>⭐ Destaques</a>
+    <a>🔥 Mais vistos</a>
+    <a>🧠 Educação</a>
+  </nav>
+
+  <div class="card-side">
+    <h3>GitHub Pages</h3>
+    <p>Todos os seus projetos carregados automaticamente.</p>
+  </div>
+</div>
+
+<div class="main">
+
+  <header>
+    <input type="text" placeholder="Buscar aplicações..." id="searchInput">
+
+    <div class="header-buttons">
+      <button>⚙️</button>
+      <button>🔔</button>
+      <button class="login">GitHub</button>
+    </div>
   </header>
 
-  <main>
-    <section id="status">Carregando projetos...</section>
-    <section id="projects" class="projects"></section>
-  </main>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Minhas Aplicações Web</h1>
+      <p>Sistemas desenvolvidos para aprender, ensinar e evoluir.</p>
+      <button>Explorar Aplicações</button>
+    </div>
+  </section>
 
-  <footer>
-    <p>Projetos carregados automaticamente do GitHub Pages.</p>
-  </footer>
+  <section class="section-title">
+    <h2>⭐ Destaques</h2>
+  </section>
 
-  <script src="script.js"></script>
+  <section class="projects" id="projects"></section>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
