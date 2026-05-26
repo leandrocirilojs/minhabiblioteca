@@ -1,59 +1,47 @@
-const githubUser = "leandrocirilojs";
-
+const username = "leandrocirilojs";
 const projectsContainer = document.getElementById("projects");
-const statusText = document.getElementById("status");
 const searchInput = document.getElementById("searchInput");
 
-let allProjects = [];
+let reposData = [];
 
-async function loadProjects() {
-  try {
-    const response = await fetch(`https://api.github.com/users/${githubUser}/repos?per_page=100`);
+async function loadRepos() {
+  const response = await fetch(
+    `https://api.github.com/users/${username}/repos?per_page=100`
+  );
 
-    if (!response.ok) {
-      throw new Error("Erro ao buscar repositórios.");
-    }
+  const repos = await response.json();
 
-    const repos = await response.json();
+  reposData = repos.filter(repo => !repo.fork);
 
-    allProjects = repos
-      .filter(repo => !repo.fork)
-      .map(repo => ({
-        name: repo.name,
-        description: repo.description || "Aplicação web criada para estudo e aprendizado.",
-        github: repo.html_url,
-        page: `https://${githubUser}.github.io/${repo.name}/`,
-        updated: repo.updated_at
-      }));
-
-    renderProjects(allProjects);
-    statusText.textContent = `${allProjects.length} projetos encontrados.`;
-
-  } catch (error) {
-    statusText.textContent = "Não foi possível carregar os projetos.";
-    console.error(error);
-  }
+  renderRepos(reposData);
 }
 
-function renderProjects(projects) {
+function renderRepos(repos) {
   projectsContainer.innerHTML = "";
 
-  if (projects.length === 0) {
-    projectsContainer.innerHTML = "<p>Nenhum projeto encontrado.</p>";
-    return;
-  }
-
-  projects.forEach(project => {
-    const card = document.createElement("article");
+  repos.forEach(repo => {
+    const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <h2>${formatName(project.name)}</h2>
-      <p>${project.description}</p>
+      <div class="card-image"></div>
 
-      <div class="links">
-        <a href="${project.page}" target="_blank">Abrir App</a>
-        <a href="${project.github}" target="_blank" class="github">Código</a>
+      <div class="card-content">
+        <h3>${formatName(repo.name)}</h3>
+
+        <p>
+          ${repo.description || "Aplicação desenvolvida para estudos e aprendizado."}
+        </p>
+
+        <div class="card-buttons">
+          <a href="https://${username}.github.io/${repo.name}/" target="_blank">
+            Abrir
+          </a>
+
+          <a href="${repo.html_url}" target="_blank">
+            Código
+          </a>
+        </div>
       </div>
     `;
 
@@ -63,20 +51,19 @@ function renderProjects(projects) {
 
 function formatName(name) {
   return name
-    .replaceAll("-", " ")
-    .replaceAll("_", " ")
-    .replace(/\b\w/g, letter => letter.toUpperCase());
+    .replace(/-/g, " ")
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, l => l.toUpperCase());
 }
 
-searchInput.addEventListener("input", () => {
-  const search = searchInput.value.toLowerCase();
+searchInput.addEventListener("input", e => {
+  const value = e.target.value.toLowerCase();
 
-  const filtered = allProjects.filter(project =>
-    project.name.toLowerCase().includes(search) ||
-    project.description.toLowerCase().includes(search)
+  const filtered = reposData.filter(repo =>
+    repo.name.toLowerCase().includes(value)
   );
 
-  renderProjects(filtered);
+  renderRepos(filtered);
 });
 
-loadProjects();
+loadRepos();
